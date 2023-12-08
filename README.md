@@ -53,7 +53,7 @@ Some example rows.
 This `metatdata.csv` file and all the downloaded configs and converted configs can up uploaded to a dataset repo by passing in a repo id.
 
 ```shell
-python update_dataset.py --repo_id <repo_id>
+python build_dataset.py --input_path <path to dowloaded configs folder> --repo_id <repo_id>
 ```
 
 If no repo id is passed in, the script will just create the `metadata.csv` file.

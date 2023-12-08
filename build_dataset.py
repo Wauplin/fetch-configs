@@ -1,6 +1,7 @@
 import argparse
 import glob
 import json
+
 import pandas as pd
 from huggingface_hub import HfApi
 
@@ -28,7 +29,7 @@ def align_updated_configs_with_model_index(config_df, model_index_df):
     we only have data for pipelines that use diffusers native model classes
 
     """
-    df = config_df.merge(model_index_df, on=["org_id", "model_name"], how="inner")
+    df = config_df.merge(model_index_df, on=["org_id", "model_name"], how="left")
     return df
 
 
@@ -57,6 +58,7 @@ def main():
     df = align_updated_configs_with_model_index(df, model_index_df)
 
     metadata_path = f"{args.output_path}/metadata.csv"
+
     df.to_csv(metadata_path)
     if not args.repo_id:
         return
