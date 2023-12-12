@@ -63,7 +63,7 @@ models = api.list_models(filter=filter, sort="downloads", direction=-1)
 def download_model_configs(model_id, model_filename, save_path):
     # Gated models throw an error. This could be cleaner
     try:
-        output = snapshot_download(model_id, allow_patterns=["**/config.json", "model_index.json"], local_dir=save_path)
+        output = snapshot_download(model_id, allow_patterns=["config.json", "**/config.json", "model_index.json"], local_dir=save_path)
 
     except HTTPError as e:
         if not e.response.status_code == 403:
