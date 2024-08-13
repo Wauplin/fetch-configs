@@ -22,7 +22,7 @@ from diffusers import (
     UNetSpatioTemporalConditionModel,
     VQModel,
 )
-from huggingface_hub import HfApi, ModelFilter, snapshot_download
+from huggingface_hub import HfApi
 from huggingface_hub.utils import disable_progress_bars
 from requests.exceptions import HTTPError
 from tqdm import tqdm
@@ -56,14 +56,12 @@ UNET_MODEL_TYPES = ["UNet2DModel", "UNet2DConditionModel", "Kandinsky3UNet", "UN
 VAE_MODEL_TYPES = ["AutoencoderKL", "AsymmetricAutoencoderKL", "AutoencoderKLTemporalDecoder", "AutoencoderTiny", "ConsistencyDecoderVAE", "VQModel"]
 
 api = HfApi()
-filter = ModelFilter(library="diffusers")
-models = api.list_models(filter=filter, sort="downloads", direction=-1)
-
+models = api.list_models(library="diffusers", sort="downloads", direction=-1)
 
 def download_model_configs(model_id, model_filename, save_path):
     # Gated models throw an error. This could be cleaner
     try:
-        output = snapshot_download(model_id, allow_patterns=["config.json", "**/config.json", "model_index.json"], local_dir=save_path)
+        output = api.snapshot_download(model_id, allow_patterns=["config.json", "**/config.json", "model_index.json"], local_dir=save_path)
 
     except HTTPError as e:
         if not e.response.status_code == 403:
